@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>منصة التعدين السحابي</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ddd;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 1rem 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      color: #00ffe1;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #aaa;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: #1e1e1e;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 180px;
+      box-shadow: 0 0 8px rgba(0,255,225,0.2);
+    }
+
+    .stat-box h3 {
+      color: #00ffe1;
+      margin-bottom: 0.7rem;
+    }
+
+    .stat-box p {
+      font-size: 1.3rem;
+      color: #eee;
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .section-title {
+      color: #00ffe1;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .plan {
+      background: #1c1c1c;
+      border-radius: 12px;
+      padding: 1.5rem 1.2rem;
+      box-shadow: 0 0 10px rgba(0,255,225,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .plan:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 15px #00ffe1;
+    }
+
+    .plan.basic {
+      border: 2px solid #00bfa5;
+    }
+
+    .plan h2 {
+      color: #00ffe1;
+      margin-bottom: 0.6rem;
+      font-size: 1.4rem;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #00ffaa;
+    }
+
+    .plan ul {
+      list-style: none;
+      color: #ccc;
+      margin-bottom: 1.3rem;
+    }
+
+    .plan ul li {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .plan button {
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #00bfa5;
+      color: #121212;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+    }
+
+    .plan button:hover {
+      background-color: #008c7a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.2rem 0;
+      border-top: 1px solid #333;
+      font-size: 0.9rem;
+      color: #555;
+      background-color: #121212;
+    }
+
+    /* مودال الشراء */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.75);
+      overflow: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: #1c1c1c;
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+      border: 1px solid #333;
+      color: #ccc;
+      position: relative;
+    }
+
+    .modal-content h3 {
+      color: #00ffe1;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      line-height: 1.4;
+      font-size: 1rem;
+    }
+
+    .modal-content code {
+      background:#222; 
+      padding: 0.4rem 0.7rem; 
+      border-radius:4px; 
+      user-select: all;
+      display: inline-block;
+      margin: 0.7rem 0;
+      font-size: 0.95rem;
+    }
+
+    .modal-content button {
+      margin-top: 1.3rem;
+      background-color: #28a745;
+      color: #fff;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      background-color: #1e7e34;
+    }
+
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>⛏️ منصة التعدين السحابي</h1>
+      <p>استثمر بثقة. ربح مضمون. منصة موثوقة وآمنة تعمل بـ USDT.</p>
+    </div>
+  </header>
+
+  <section class="stats container">
+    <div class="stat-box">
+      <h3>📈 عدد المنخرطين</h3>
+      <p id="subscribers">4,572 مستخدم</p>
+    </div>
+    <div class="stat-box">
+      <h3>💰 إجمالي الاستثمارات</h3>
+      <p id="totalInvested">115,200 USDT</p>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 class="section-title">💼 خطط الاستثمار</h2>
+    <section class="plans">
+      <div class="plan basic">
+        <h2>بـاقة 10 USDT</h2>
+        <p class="price">10 USDT</p>
+        <ul>
+          <li>ربح يومي: 0.3 USDT</li>
+          <li>المدة: 30 يوم</li>
+        </ul>
+        <button onclick="buyPlan('بـاقة 10', 10)">شراء</button>
+      </div>
+
+      <div class="plan basic">
+        <h2>بـاقة 20 USDT</h2>
+        <p class="price">20 USDT</p>
+        <ul>
+          <li>ربح يومي: 0.7 USDT</li>
+          <li>المدة: 30 يوم</li>
+        </ul>
+        <button onclick="buyPlan('بـاقة 20', 20)">شراء</button>
+      </div>
+
+      <div class="plan basic">
+        <h2>بـاقة 30 USDT</h2>
+        <p class="price">30 USDT</p>
+        <ul>
+          <li>ربح يومي: 1.0 USDT</li>
+          <li>المدة: 30 يوم</li>
+        </ul>
+        <button onclick="buyPlan('بـاقة 30', 30)">شراء</button>
+      </div>
+
+      <div class="plan basic">
+        <h2>بـاقة 40 USDT</h2>
+        <p class="price">40 USDT</p>
+        <ul>
+          <li>ربح يومي: 1.3 USDT</li>
+          <li>المدة: 30 يوم</li>
+        </ul>
+        <button onclick="buyPlan('بـاقة 40', 40)">شراء</button>
+      </div>
+
+      <div class="plan">
+        <h2>الخطة الأساسية</h2>
+        <p class="price">50 USDT</p>
+        <ul>
+          <li>ربح يومي: 1.5 USDT</li>
+          <li>المدة: 30 يوم</li>
+          <li>دعم عبر البريد الإلكتروني</li>
+        </ul>
+        <button onclick="buyPlan('الخطة الأساسية', 50)">شراء</button>
+      </div>
+
+      <div class="plan">
+        <h2>الخطة الفضية</h2>
+        <p class="price">250 USDT</p>
+        <ul>
+          <li>ربح يومي: 10 USDT</li>
+          <li>المدة: 30 يوم</li>
+          <li>دعم عبر البريد الإلكتروني والهاتف</li>
+        </ul>
+        <button onclick="buyPlan('الخطة الفضية', 250)">شراء</button>
+      </div>
+
+      <div class="plan">
+        <h2>الخطة الذهبية</h2>
+        <p class="price">500 USDT</p>
+        <ul>
+          <li>ربح يومي: 20 USDT</li>
+          <li>المدة: 30 يوم</li>
+          <li>دعم مخصص</li>
+        </ul>
+        <button onclick="buyPlan('الخطة الذهبية', 500)">شراء</button>
+      </div>
+
+      <div class="plan">
+        <h2>الخطة البلاتينية</h2>
+        <p class="price">1000 USDT</p>
+        <ul>
+          <li>ربح يومي: 45 USDT</li>
+          <li>المدة: 30 يوم</li>
+          <li>مساعد شخصي</li>
+        </ul>
+        <button onclick="buyPlan('الخطة البلاتينية', 1000)">شراء</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 منصة التعدين السحابي | موثوقة منذ 2023 | جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+
+  <!-- نافذة التأكيد -->
+  <div id="purchaseModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>تأكيد الشراء</h3>
+      <p id="modalMessage"></p>
+      <button onclick="confirmPurchase()">تأكيد</button>
+    </div>
+  </div>
+
+  <script>
+    // عنوان محفظة USDT (يمكنك تغييره)
+    const usdtAddress = "TXYZ12345YOURUSDTADDRESS67890ABCDE";
+
+    // عناصر الصفحة
+    const modal = document.getElementById('purchaseModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const subscribersElem = document.getElementById('subscribers');
+    const totalInvestedElem = document.getElementById('totalInvested');
+
+    // القيم الابتدائية
+    let subscribers = 4572;
+    let totalInvested = 115200;
+
+    // دالة لتنسيق الأرقام بفواصل
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // تحديث عرض الإحصائيات
+    function updateDisplay() {
+      subscribersElem.textContent = `${formatNumber(subscribers)} مستخدم`;
+      totalInvestedElem.textContent = `${formatNumber(totalInvested)} USDT`;
+    }
+
+    // زيادة عدد المنخرطين والمبلغ بشكل عشوائي وواقعي
+    function incrementStats() {
+      const newSubs = Math.floor(Math.random() * 5) + 1; // 1-5 مستخدمين جدد
+      subscribers += newSubs;
+
+      // مبلغ عشوائي لكل مستخدم جديد بين 10 و50 USDT
+      let newAmount = 0;
+      for(let i = 0; i < newSubs; i++) {
+        newAmount += Math.floor(Math.random() * 41) + 10;
+      }
+      totalInvested += newAmount;
+
+      updateDisplay();
+    }
+
+    // تفعيل التحديث كل 4 ثواني
+    setInterval(incrementStats, 4000);
+
+    // تحديث العرض أول مرة
+    updateDisplay();
+
+    // عند الضغط على زر شراء تظهر نافذة المودال مع التفاصيل
+    function buyPlan(planName, amount) {
+      modal.style.display = 'flex';
+      modalMessage.innerHTML = `
+        <strong>اسم الباقة:</strong> ${planName} <br/>
+        <strong>المبلغ المطلوب:</strong> ${amount} USDT <br/><br/>
+        <strong>أرسل المبلغ إلى عنوان USDT التالي:</strong><br/>
+        <code>${usdtAddress}</code>
+        <br/><br/>
+        بعد استلامنا لدفعتك والتحقق منها، سيتم إرسال الأرباح تلقائيًا إلى عنوان المحفظة التي استخدمتها في الشراء.<br/>
+        يرجى التأكد من صحة العنوان واحتفظ بإثبات الدفع.
+      `;
+    }
+
+    // إغلاق النافذة
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    // تأكيد الشراء (يمكن تعديل حسب حاجتك)
+    function confirmPurchase() {
+      alert('شكرًا لشرائك! سيتم مراجعة الدفع قريبًا.');
+      closeModal();
+    }
+
+    // إغلاق المودال عند الضغط خارجه
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    };
+  </script>
+</body>
+</html>
